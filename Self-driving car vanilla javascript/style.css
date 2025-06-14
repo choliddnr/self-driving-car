@@ -1,0 +1,28 @@
+body{
+    margin:0;
+    background: rgb(148, 148, 148);
+    overflow: hidden;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#verticalButtons{
+    display: flex;
+    flex-direction: column;
+}
+button{
+    border: none;
+    cursor: pointer;
+    margin: 10px 5px;
+
+}
+button:hover{
+    background-color: aqua;
+}
+#envCanvas{
+    background: rgb(81, 80, 80);
+}
+#nnCanvas{
+    background: rgb(42, 42, 42);
+}
