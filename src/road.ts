@@ -1,5 +1,19 @@
+import { lerp } from "./utils";
+
+type Point = { x: number; y: number };
+type Border = [Point, Point];
+
 class Road {
-  constructor(x, width, laneCount = 3) {
+  x: number;
+  width: number;
+  laneCount: number;
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  borders: Border[];
+
+  constructor(x: number, width: number, laneCount: number = 3) {
     this.x = x;
     this.width = width;
     this.laneCount = laneCount;
@@ -22,7 +36,7 @@ class Road {
     ];
   }
 
-  getLaneCenter(laneIndex) {
+  getLaneCenter(laneIndex: number): number {
     const laneWidth = this.width / this.laneCount;
     return (
       this.left +
@@ -31,7 +45,7 @@ class Road {
     );
   }
 
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D): void {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "white";
 
@@ -53,3 +67,5 @@ class Road {
     });
   }
 }
+
+export { Road };

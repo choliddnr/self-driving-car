@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,7 +7,14 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app"></div>
+    <canvas id="envCanvas"></canvas>
+    <div id="verticalButtons">
+      <button onclick="save()">S</button>
+      <button onclick="discard()">D</button>
+      <button onclick="test()">T</button>
+    </div>
+    <canvas id="nnCanvas"></canvas>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

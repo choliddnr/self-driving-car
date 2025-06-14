@@ -1,5 +1,16 @@
+import { Car } from "./car";
+import type { Point, Reading } from "./types";
+import { getIntersection, lerp } from "./utils";
+
 class Sensor {
-  constructor(car) {
+  car: Car;
+  rayCount: number = 5;
+  rayLength: number = 100;
+  raySpread: number = Math.PI / 2;
+  rays: [Point, Point][] = [];
+  readings: (Reading | null)[] = [];
+
+  constructor(car: Car) {
     this.car = car;
     this.rayCount = 5;
     this.rayLength = 100;
@@ -7,7 +18,11 @@ class Sensor {
 
     this.rays = [];
   }
-  #getReading(ray, roadBorders, traffic) {
+  #getReading(
+    ray: [Point, Point],
+    roadBorders: [Point, Point][],
+    traffic: Car[]
+  ): Reading | null {
     // console.log(roadBorders[0], traffic[0]);
     let touches = [];
     for (let i = 0; i < roadBorders.length; i++) {
@@ -39,7 +54,7 @@ class Sensor {
     } else {
       const offsets = touches.map((e) => e.offset);
       const minOffset = Math.min(...offsets);
-      return touches.find((e) => e.offset == minOffset);
+      return touches.find((e) => e.offset == minOffset) || null;
     }
   }
   #castRays() {
@@ -60,18 +75,18 @@ class Sensor {
     }
   }
 
-  update(roadBorders, traffic) {
+  update(roadBorders: [Point, Point][], traffic: Car[]): void {
     this.#castRays();
     this.readings = [];
     for (let i = 0; i < this.rays.length; i++) {
       this.readings.push(this.#getReading(this.rays[i], roadBorders, traffic));
     }
   }
-  draw(ctx) {
+  draw(ctx: CanvasRenderingContext2D): void {
     for (let i = 0; i < this.rayCount; i++) {
       let end = this.rays[i][1];
       if (this.readings[i]) {
-        end = this.readings[i];
+        end = { x: this.readings[i]?.x || 0, y: this.readings[i]?.y || 0 };
       }
       ctx.beginPath();
       ctx.lineWidth = 2;
@@ -89,3 +104,5 @@ class Sensor {
     }
   }
 }
+
+export { Sensor };
