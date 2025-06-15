@@ -5,6 +5,7 @@ import { polysIntersect, getRandomArbitrary } from "./utils";
 import type { ActivationFunction, Point } from "./types";
 
 class Car {
+  id?: number;
   x: number;
   y: number;
   width: number;
@@ -42,18 +43,24 @@ class Car {
 
     if (this.isDummy) {
       this.speed = 1;
-      this.maxSpeed = getRandomArbitrary(2.0, 2.0);
+      this.maxSpeed = getRandomArbitrary(1.7, 2.7);
+      // this.maxSpeed = getRandomArbitrary(2.0, 2.0);
     } else {
-      this.structure = [[5], [5], [4, "sigmoid"]];
+      this.structure = [[7], [7, "relu"], [4, "sigmoid"]];
       this.brain = new Network(this.structure);
       // sensor = [1, 0.2, 0.3, 0.7, 1];
+      // console.log(this.brain.layers[1]);
+
       this.speed = 0;
       this.maxSpeed = 3.0;
       this.sensor = new Sensor(this);
-      this.brain_threshold = 0.7;
+      this.brain_threshold = 0.8;
     }
 
     this.controls = new Controls(this.isDummy);
+  }
+  setId(id: number): void {
+    this.id = id;
   }
 
   update(roadBorders: [Point, Point][], traffic: Car[]): void {
@@ -73,34 +80,62 @@ class Car {
         }
       }
       this.brain!.feedForward(brain_inputs);
-      // console.log(brain_inputs);
-
-      if (this.brain!.outputs[0] >= this.brain_threshold!) {
-        this.controls.forward = true;
-      } else {
-        this.controls.forward = false;
-      }
+      // // console.log(brain_inputs);
+      let ud = "none" as "forward" | "reverse" | "none";
+      let lr = "none" as "left" | "right" | "none";
       if (this.brain!.outputs[1] >= this.brain_threshold!) {
+        // ud = "reverse";
         this.controls.reverse = true;
       } else {
         this.controls.reverse = false;
       }
-      if (this.brain!.outputs[2] >= this.brain_threshold!) {
-        this.controls.left = true;
+      if (this.brain!.outputs[0] >= this.brain_threshold!) {
+        // ud = "forward";
+        this.controls.forward = true;
       } else {
-        this.controls.left = false;
+        this.controls.forward = false;
       }
       if (this.brain!.outputs[3] >= this.brain_threshold!) {
+        lr = "right";
+      }
+      if (this.brain!.outputs[2] >= this.brain_threshold!) {
+        lr = "left";
+      }
+
+      if (this.controls.reverse === true && this.controls.forward === true) {
+        this.speed -= 0.1;
+      } else {
+        this.speed += 0.1;
+        if (this.speed > this.maxSpeed) this.speed = this.maxSpeed;
+      }
+
+      // if (ud === "forward") {
+      //   this.controls.reverse = false;
+      //   this.controls.forward = true;
+      // } else if (ud === "reverse") {
+      //   this.controls.forward = false;
+      //   this.controls.reverse = true;
+      // } else {
+      //   this.controls.forward = false;
+      //   this.controls.reverse = false;
+      // }
+
+      if (lr === "left") {
+        this.controls.right = false;
+        this.controls.left = true;
+      } else if (lr === "right") {
+        this.controls.left = false;
         this.controls.right = true;
       } else {
+        this.controls.left = false;
         this.controls.right = false;
       }
-      let y = [
-        this.controls.forward,
-        this.controls.reverse,
-        this.controls.right,
-        this.controls.left,
-      ];
+      // let y = [
+      //   this.controls.forward,
+      //   this.controls.reverse,
+      //   this.controls.right,
+      //   this.controls.left,
+      // ];
       // console.log(y);
     }
   }

@@ -69,10 +69,10 @@ class Layer {
     for (let i = 0; i < this.numNeuron; i++) {
       this.weights[i] = new Array(this.prevNeuron.length);
       for (let j = 0; j < this.prevNeuron.length; j++) {
-        this.weights[i][j] = Math.random() * 2 - 1;
+        this.weights[i][j] = Math.random() - 0.25;
       }
     }
-    this.bias = Math.random() * 2 - 1;
+    this.bias = Math.random() - 0.25;
   }
 
   feedForward(): void {
@@ -101,8 +101,17 @@ class Network {
       this.layers[0].neurons[i].output = inputs[i];
     }
     for (let i = 1; i < this.layers.length; i++) {
+      if (i === 1) {
+        console.log(
+          i,
+          this.layers[i].weights.length,
+          this.layers[i].prevNeuron
+        );
+      }
       this.layers[i].feedForward();
     }
+    // console.log(this.layers[1]);
+
     this.outputs = this.layers.at(-1)?.neurons.map((n) => n.output) || [];
   }
 
@@ -137,4 +146,4 @@ class Network {
   }
 }
 
-export { Network };
+export { Network, Layer };

@@ -8,3 +8,16 @@ export type Reading = Point & {
 };
 
 export type ActivationFunction = "relu" | "sigmoid" | "none";
+
+export type NeuronLayer = {
+  neuronCount: number;
+  outputs: number[];
+  inputs: number[];
+  weights: number[][];
+  bias: number;
+  biases: number;
+};
+
+export type NeuralNetwork = {
+  layers: NeuronLayer[];
+};

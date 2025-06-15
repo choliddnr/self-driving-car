@@ -12,9 +12,9 @@ class Sensor {
 
   constructor(car: Car) {
     this.car = car;
-    this.rayCount = 5;
+    this.rayCount = car.brain?.layers[0].numNeuron || 5;
     this.rayLength = 100;
-    this.raySpread = Math.PI / 2;
+    this.raySpread = Math.PI;
 
     this.rays = [];
   }

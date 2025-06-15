@@ -25,3 +25,13 @@ button:hover {
 #nnCanvas {
   background: rgb(42, 42, 42);
 }
+
+.control {
+  padding: 10px;
+  font-weight: bold;
+  margin: 10px;
+  background: rgb(252, 166, 166);
+  &.active {
+    background: rgb(130, 235, 120);
+  }
+}
